@@ -1,0 +1,313 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  release:
+    types: [ published ]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ['16', '18', '20']
+        
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run linting
+      run: npm run lint
+      
+    - name: Check TypeScript types
+      run: npm run type-check
+      
+    - name: Compile extension
+      run: npm run compile
+      
+    - name: Compile web extension
+      run: npm run compile-web
+      
+    - name: Run tests
+      run: npm test
+      if: runner.os == 'Linux'
+      
+    - name: Run tests with coverage
+      run: npm run test:coverage
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '18'
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '18'
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run ESLint
+      run: npm run lint
+      
+    - name: Check Prettier formatting
+      run: npm run format:check
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run npm audit
+      run: npm audit --audit-level moderate
+      
+    - name: Run Snyk security scan
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      continue-on-error: true
+
+  build:
+    name: Build Extension
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Compile extension
+      run: npm run compile
+      
+    - name: Compile web extension
+      run: npm run compile-web
+      
+    - name: Package extension
+      run: npm run package
+      
+    - name: Upload extension artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: quarkdown-vscode-${{ github.sha }}
+        path: '*.vsix'
+        retention-days: 30
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Download extension artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: quarkdown-vscode-${{ github.sha }}
+        
+    - name: Install VS Code
+      uses: microsoft/vscode-test-action@v1
+      with:
+        version: stable
+        
+    - name: Run integration tests
+      run: npm run test:integration
+
+  publish:
+    name: Publish to Marketplace
+    runs-on: ubuntu-latest
+    needs: [test, lint, build, integration-test]
+    if: github.event_name == 'release' && github.event.action == 'published'
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Download extension artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: quarkdown-vscode-${{ github.sha }}
+        
+    - name: Publish to VS Code Marketplace
+      run: npx vsce publish --packagePath *.vsix
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        
+    - name: Publish to Open VSX Registry
+      run: npx ovsx publish *.vsix
+      env:
+        OVSX_PAT: ${{ secrets.OVSX_PAT }}
+
+  pre-release:
+    name: Pre-release Build
+    runs-on: ubuntu-latest
+    needs: [test, lint, build]
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Update version for pre-release
+      run: |
+        VERSION=$(node -p "require('./package.json').version")
+        PRERELEASE_VERSION="${VERSION}-beta.${GITHUB_RUN_NUMBER}"
+        npm version $PRERELEASE_VERSION --no-git-tag-version
+        
+    - name: Package pre-release
+      run: npm run package
+      
+    - name: Create pre-release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ env.PRERELEASE_VERSION }}
+        name: Pre-release v${{ env.PRERELEASE_VERSION }}
+        body: |
+          This is a pre-release build from the develop branch.
+          
+          **Changes in this build:**
+          ${{ github.event.head_commit.message }}
+          
+          **⚠️ Note:** This is a development version and may contain bugs.
+        prerelease: true
+        files: '*.vsix'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  documentation:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Generate documentation
+      run: npm run docs:generate
+      
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: success()
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        cname: quarkdown-vscode.dev
+
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [test, lint, build, integration-test]
+    if: always()
+    
+    steps:
+    - name: Discord notification on success
+      if: ${{ needs.test.result == 'success' && needs.lint.result == 'success' && needs.build.result == 'success' }}
+      uses: sarisia/actions-status-discord@v1
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        status: success
+        title: "Quarkdown VS Code Extension"
+        description: "✅ All checks passed!"
+        color: 0x00ff00
+        
+    - name: Discord notification on failure
+      if: ${{ needs.test.result == 'failure' || needs.lint.result == 'failure' || needs.build.result == 'failure' }}
+      uses: sarisia/actions-status-discord@v1
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        status: failure
+        title: "Quarkdown VS Code Extension"
+        description: "❌ Build failed!"
+        color: 0xff0000

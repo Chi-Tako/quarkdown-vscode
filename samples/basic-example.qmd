@@ -1,0 +1,216 @@
+.docname {Quarkdown Showcase}
+.docauthor {VS Code Extension Demo}
+.doctype {plain}
+.theme {default}
+
+# Welcome to Quarkdown!
+
+This document showcases the powerful features of Quarkdown - a Turing-complete Markdown extension system.
+
+## Variables and Basic Functions
+
+Let's start with some variables:
+
+.var {author_name} {Giorgio Garofalo}
+.var {project_version} {1.5.1}
+.var {pi_value} {3.14159}
+
+The original Quarkdown was created by **.author_name** and is currently at version **.project_version**.
+
+Mathematical constant π = **.pi_value**
+
+## Mathematical Operations
+
+.var {radius} {5}
+.var {area} {.multiply {.pow {.radius} to:{2}} by:{.pi_value}}
+
+For a circle with radius **.radius**, the area is **.area** square units.
+
+Some basic math examples:
+- 5 + 3 = .add {5} to:{3}
+- 6 × 7 = .multiply {6} by:{7}
+- 2³ = .pow {2} to:{3}
+
+## Layout System
+
+### Row Layout
+
+.row alignment:{center} gap:{2cm}
+    **Column 1**
+    
+    This is content in the first column of our row layout.
+    
+    **Column 2**
+    
+    This is content in the second column, perfectly aligned.
+
+### Grid Layout
+
+.grid columns:{3} gap:{1em}
+    **Feature 1**
+    
+    Easy to use
+    
+    **Feature 2**
+    
+    Powerful functions
+    
+    **Feature 3**
+    
+    Live preview
+
+### Centered Content
+
+.center
+🎉 **This content is perfectly centered!** 🎉
+
+## Conditional Content
+
+.var {show_advanced} {true}
+.var {user_level} {beginner}
+
+.if {.show_advanced}
+    ### Advanced Features
+    
+    Since advanced features are enabled, here are some powerful capabilities:
+    
+    - Custom function definitions
+    - Complex mathematical expressions
+    - Dynamic content generation
+
+## Loops and Repetition
+
+.repeat {3}
+    🔄 This line will appear three times!
+
+## Enhanced Blockquotes
+
+> Note: This is an informational note that provides helpful context.
+
+> Tip: Use blockquote types to categorize different kinds of information!
+
+> Warning: Be careful when using advanced features - they're powerful but require understanding.
+
+> Info: Quarkdown extends standard Markdown with these special blockquote types.
+
+## Math Support
+
+### Inline Math
+
+The quadratic formula is $ x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} $.
+
+### Display Math
+
+Here's Euler's famous identity:
+
+$$
+e^{i\pi} + 1 = 0
+$$
+
+And the Fourier transform:
+
+$$
+F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt
+$$
+
+## Enhanced Images
+
+Standard image:
+![Quarkdown Logo](https://via.placeholder.com/400x200/4CAF50/white?text=Quarkdown)
+
+Enhanced image with dimensions:
+!(300*150)[Resized Image](https://via.placeholder.com/600x300/2196F3/white?text=Enhanced)
+
+## Code Examples
+
+Here's some Quarkdown syntax:
+
+```markdown
+.function {greet}
+    name:
+    Hello, **.name**! Welcome to Quarkdown.
+
+.greet {World}
+```
+
+And here's JavaScript:
+
+```javascript
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10)); // 55
+```
+
+## Tables
+
+| Feature | Standard Markdown | Quarkdown |
+|---------|------------------|-----------|
+| Headers | ✅ | ✅ |
+| Lists | ✅ | ✅ |
+| Functions | ❌ | ✅ |
+| Variables | ❌ | ✅ |
+| Layouts | ❌ | ✅ |
+| Math | Limited | ✅ |
+
+## Custom Function Definition
+
+Let's define a custom greeting function:
+
+.function {personal_greeting}
+    name title:
+    🎊 **Hello, .title .name!** 🎊
+    
+    Welcome to the amazing world of Quarkdown!
+
+Now let's use it:
+
+.personal_greeting {Alice} title:{Dr.}
+
+.personal_greeting {Bob} title:{Prof.}
+
+## String Operations
+
+.var {sample_text} {hello world}
+
+Original text: **.sample_text**
+
+.upper
+    Uppercase: **.sample_text**
+
+.lower
+    Lowercase: **SAMPLE TEXT**
+
+## Date and Time
+
+Today's date: **.today**
+
+Current year: **.year**
+
+Full timestamp: **.now**
+
+## Conclusion
+
+.center
+**Thank you for exploring Quarkdown!**
+
+This powerful system brings programming capabilities to Markdown while maintaining its simplicity and readability.
+
+.row alignment:{center} gap:{3cm}
+    📚 **Learn More**
+    
+    Explore the documentation
+    
+    🚀 **Get Started**
+    
+    Create your first project
+    
+    💡 **Contribute**
+    
+    Join the community
+
+---
+
+*Generated with Quarkdown v.project_version | .today*

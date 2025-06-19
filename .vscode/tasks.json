@@ -1,0 +1,221 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile",
+            "group": "build",
+            "type": "npm",
+            "script": "compile",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "watch",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "npm",
+            "script": "watch",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            },
+            "problemMatcher": [
+                {
+                    "base": "$tsc-watch",
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^\\s*\\d{1,2}:\\d{1,2}:\\d{1,2}(?: AM| PM)? - File change detected\\. Starting incremental compilation\\.\\.\\.",
+                        "endsPattern": "^\\s*\\d{1,2}:\\d{1,2}:\\d{1,2}(?: AM| PM)? - Compilation complete\\. Watching for file changes\\."
+                    }
+                }
+            ]
+        },
+        {
+            "label": "compile-web",
+            "group": "build",
+            "type": "npm",
+            "script": "compile-web",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$webpack"
+            ]
+        },
+        {
+            "label": "watch-web",
+            "group": "build",
+            "type": "npm",
+            "script": "watch-web",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            },
+            "problemMatcher": [
+                {
+                    "base": "$webpack-watch",
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "webpack is watching the files",
+                        "endsPattern": "webpack \\d+ compiled"
+                    }
+                }
+            ]
+        },
+        {
+            "label": "test",
+            "group": "test",
+            "type": "npm",
+            "script": "test",
+            "isBackground": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "lint",
+            "group": "build",
+            "type": "npm",
+            "script": "lint",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "label": "lint-fix",
+            "group": "build",
+            "type": "npm",
+            "script": "lint:fix",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "out"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "windows": {
+                "command": "Remove-Item",
+                "args": [
+                    "-Recurse",
+                    "-Force",
+                    "out"
+                ]
+            }
+        },
+        {
+            "label": "package",
+            "type": "npm",
+            "script": "package",
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "compile",
+            "problemMatcher": []
+        },
+        {
+            "label": "install-dependencies",
+            "type": "npm",
+            "script": "install",
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "dev-setup",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "clean",
+                "install-dependencies",
+                "compile"
+            ],
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "format",
+            "type": "npm",
+            "script": "format",
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "type-check",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "tsc",
+                "--noEmit"
+            ],
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "coverage",
+            "type": "npm",
+            "script": "test:coverage",
+            "group": "test",
+            "isBackground": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

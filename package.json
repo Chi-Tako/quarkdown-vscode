@@ -1,0 +1,182 @@
+{
+  "name": "quarkdown-vscode",
+  "displayName": "Quarkdown for VS Code",
+  "description": "Turing-complete Markdown extension system with live preview",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:quarkdown"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "quarkdown",
+        "aliases": ["Quarkdown", "qmd"],
+        "extensions": [".qmd"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "quarkdown",
+        "scopeName": "text.html.markdown.quarkdown",
+        "path": "./syntaxes/quarkdown.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "quarkdown.preview.show",
+        "title": "Open Quarkdown Preview",
+        "category": "Quarkdown",
+        "icon": "$(preview)"
+      },
+      {
+        "command": "quarkdown.preview.showToSide",
+        "title": "Open Quarkdown Preview to the Side",
+        "category": "Quarkdown",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "quarkdown.export.html",
+        "title": "Export to HTML",
+        "category": "Quarkdown"
+      },
+      {
+        "command": "quarkdown.export.pdf",
+        "title": "Export to PDF",
+        "category": "Quarkdown"
+      },
+      {
+        "command": "quarkdown.create.project",
+        "title": "Create Quarkdown Project",
+        "category": "Quarkdown"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "quarkdown.preview.show",
+          "when": "resourceLangId == quarkdown",
+          "group": "navigation"
+        },
+        {
+          "command": "quarkdown.preview.showToSide",
+          "when": "resourceLangId == quarkdown",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "quarkdown.export.html",
+          "when": "resourceLangId == quarkdown",
+          "group": "quarkdown"
+        },
+        {
+          "command": "quarkdown.export.pdf",
+          "when": "resourceLangId == quarkdown",
+          "group": "quarkdown"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Quarkdown",
+      "properties": {
+        "quarkdown.preview.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh preview when document changes"
+        },
+        "quarkdown.preview.theme": {
+          "type": "string",
+          "enum": ["default", "darko", "minimal"],
+          "default": "default",
+          "description": "Preview theme"
+        },
+        "quarkdown.export.outputDirectory": {
+          "type": "string",
+          "default": "./output",
+          "description": "Default output directory for exports"
+        },
+        "quarkdown.stdlib.customPath": {
+          "type": "string",
+          "description": "Path to custom standard library functions"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "compile-web": "webpack --mode=development --config ./webpack.config.js",
+    "watch-web": "webpack --mode=development --watch --config ./webpack.config.js",
+    "package": "webpack --mode=production --devtool hidden-source-map",
+    "package-web": "webpack --mode=production --devtool hidden-source-map --config ./webpack.config.js",
+    "test": "node ./out/test/runTest.js",
+    "test:unit": "mocha out/test/suite/**/*.test.js",
+    "test:integration": "node ./out/test/runTest.js",
+    "test:coverage": "nyc npm run test:unit",
+    "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"*.{json,md,yml}\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"*.{json,md,yml}\"",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf out *.vsix",
+    "prebuild": "npm run clean && npm run lint && npm run type-check",
+    "build": "npm run compile && npm run compile-web",
+    "prepackage": "npm run prebuild && npm run build",
+    "docs:generate": "typedoc --out docs src",
+    "docs:serve": "http-server docs -p 8080",
+    "dev": "npm run watch",
+    "dev:web": "npm run watch-web",
+    "prepare": "husky install",
+    "semantic-release": "semantic-release"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^18.0.0",
+    "@types/mocha": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "typescript": "^5.0.0",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "ts-loader": "^9.4.4",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0",
+    "mocha": "^10.2.0", 
+    "nyc": "^15.1.0",
+    "rimraf": "^5.0.1",
+    "typedoc": "^0.24.8",
+    "http-server": "^14.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "semantic-release": "^21.0.7",
+    "@vscode/test-electron": "^2.3.4",
+    "@vscode/vsce": "^2.20.0",
+    "ovsx": "^0.8.2",
+    "raw-loader": "^4.0.2",
+    "path-browserify": "^1.0.1",
+    "os-browserify": "^0.3.0",
+    "crypto-browserify": "^3.12.0",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "markdown-it": "^13.0.1",
+    "puppeteer": "^21.0.0",
+    "reveal.js": "^4.6.1",
+    "mermaid": "^10.0.0",
+    "katex": "^0.16.0"
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Quarkdown",
+  "scopeName": "text.html.markdown.quarkdown",
+  "patterns": [
+    {
+      "include": "#quarkdown-functions"
+    },
+    {
+      "include": "#quarkdown-variables"
+    },
+    {
+      "include": "#quarkdown-math"
+    },
+    {
+      "include": "#quarkdown-enhanced-images"
+    },
+    {
+      "include": "#quarkdown-blockquotes"
+    },
+    {
+      "include": "text.html.markdown"
+    }
+  ],
+  "repository": {
+    "quarkdown-functions": {
+      "patterns": [
+        {
+          "name": "meta.function-call.quarkdown",
+          "begin": "(\\.)(\\w+)(?=\\s*\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.function.quarkdown"
+            },
+            "2": {
+              "name": "entity.name.function.quarkdown"
+            }
+          },
+          "end": "(?<=\\})|$",
+          "patterns": [
+            {
+              "include": "#function-arguments"
+            },
+            {
+              "include": "#function-body"
+            }
+          ]
+        },
+        {
+          "name": "meta.function-definition.quarkdown",
+          "begin": "(\\.)(function)\\s*(\\{)(\\w+)(\\})",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.function.quarkdown"
+            },
+            "2": {
+              "name": "storage.type.function.quarkdown"
+            },
+            "3": {
+              "name": "punctuation.definition.parameters.begin.quarkdown"
+            },
+            "4": {
+              "name": "entity.name.function.quarkdown"
+            },
+            "5": {
+              "name": "punctuation.definition.parameters.end.quarkdown"
+            }
+          },
+          "end": "(?=^\\.|^\\s*$|^#)",
+          "patterns": [
+            {
+              "include": "#function-parameters"
+            },
+            {
+              "include": "text.html.markdown"
+            }
+          ]
+        }
+      ]
+    },
+    "function-arguments": {
+      "patterns": [
+        {
+          "name": "meta.function-argument.quarkdown",
+          "begin": "\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.begin.quarkdown"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.quarkdown"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#quarkdown-variables"
+            },
+            {
+              "name": "string.unquoted.argument.quarkdown",
+              "match": "[^{}]+"
+            }
+          ]
+        },
+        {
+          "name": "meta.named-argument.quarkdown",
+          "match": "(\\w+)(:)(?=\\{)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.quarkdown"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.quarkdown"
+            }
+          }
+        }
+      ]
+    },
+    "function-body": {
+      "patterns": [
+        {
+          "include": "text.html.markdown"
+        }
+      ]
+    },
+    "function-parameters": {
+      "patterns": [
+        {
+          "name": "variable.parameter.quarkdown",
+          "match": "^\\s+(\\w+)(?=\\s|:)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.quarkdown"
+            }
+          }
+        },
+        {
+          "name": "punctuation.separator.parameter.quarkdown",
+          "match": ":"
+        }
+      ]
+    },
+    "quarkdown-variables": {
+      "patterns": [
+        {
+          "name": "variable.other.quarkdown",
+          "match": "(\\.)(\\w+)(?!\\s*\\{)",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.variable.quarkdown"
+            },
+            "2": {
+              "name": "variable.other.quarkdown"
+            }
+          }
+        }
+      ]
+    },
+    "quarkdown-math": {
+      "patterns": [
+        {
+          "name": "markup.math.inline.quarkdown",
+          "begin": "(?<!\\\\)\\$",
+          "end": "(?<!\\\\)\\$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.math.begin.quarkdown"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.math.end.quarkdown"
+            }
+          },
+          "patterns": [
+            {
+              "name": "markup.math.latex",
+              "match": "."
+            }
+          ]
+        },
+        {
+          "name": "markup.math.display.quarkdown",
+          "begin": "(?<!\\\\)\\$\\$",
+          "end": "(?<!\\\\)\\$\\$",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.math.begin.quarkdown"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.math.end.quarkdown"
+            }
+          },
+          "patterns": [
+            {
+              "name": "markup.math.latex",
+              "match": "."
+            }
+          ]
+        }
+      ]
+    },
+    "quarkdown-enhanced-images": {
+      "patterns": [
+        {
+          "name": "meta.image.enhanced.quarkdown",
+          "match": "(!)(\\()([^)]*)(\\))(\\[)([^\\]]*)(\\])(\\()([^)]*)(\\))",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.image.quarkdown"
+            },
+            "2": {
+              "name": "punctuation.definition.dimensions.begin.quarkdown"
+            },
+            "3": {
+              "name": "string.unquoted.dimensions.quarkdown"
+            },
+            "4": {
+              "name": "punctuation.definition.dimensions.end.quarkdown"
+            },
+            "5": {
+              "name": "punctuation.definition.alt.begin.quarkdown"
+            },
+            "6": {
+              "name": "string.unquoted.alt.quarkdown"
+            },
+            "7": {
+              "name": "punctuation.definition.alt.end.quarkdown"
+            },
+            "8": {
+              "name": "punctuation.definition.url.begin.quarkdown"
+            },
+            "9": {
+              "name": "markup.underline.link.quarkdown"
+            },
+            "10": {
+              "name": "punctuation.definition.url.end.quarkdown"
+            }
+          }
+        }
+      ]
+    },
+    "quarkdown-blockquotes": {
+      "patterns": [
+        {
+          "name": "markup.quote.note.quarkdown",
+          "begin": "^\\s*>\\s*(Note):",
+          "beginCaptures": {
+            "1": {
+              "name": "markup.quote.type.note.quarkdown"
+            }
+          },
+          "end": "^(?!\\s*>)",
+          "patterns": [
+            {
+              "include": "text.html.markdown#blockquote"
+            }
+          ]
+        },
+        {
+          "name": "markup.quote.tip.quarkdown",
+          "begin": "^\\s*>\\s*(Tip):",
+          "beginCaptures": {
+            "1": {
+              "name": "markup.quote.type.tip.quarkdown"
+            }
+          },
+          "end": "^(?!\\s*>)",
+          "patterns": [
+            {
+              "include": "text.html.markdown#blockquote"
+            }
+          ]
+        },
+        {
+          "name": "markup.quote.warning.quarkdown",
+          "begin": "^\\s*>\\s*(Warning):",
+          "beginCaptures": {
+            "1": {
+              "name": "markup.quote.type.warning.quarkdown"
+            }
+          },
+          "end": "^(?!\\s*>)",
+          "patterns": [
+            {
+              "include": "text.html.markdown#blockquote"
+            }
+          ]
+        },
+        {
+          "name": "markup.quote.info.quarkdown",
+          "begin": "^\\s*>\\s*(Info):",
+          "beginCaptures": {
+            "1": {
+              "name": "markup.quote.type.info.quarkdown"
+            }
+          },
+          "end": "^(?!\\s*>)",
+          "patterns": [
+            {
+              "include": "text.html.markdown#blockquote"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

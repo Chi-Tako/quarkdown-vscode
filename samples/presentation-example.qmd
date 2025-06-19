@@ -1,0 +1,401 @@
+.docname {Quarkdown: The Future of Document Creation}
+.docauthor {Tech Conference 2025}
+.doctype {slides}
+.theme {darko}
+
+# Quarkdown
+## The Future of Document Creation
+
+.center
+**Tech Conference 2025**
+
+*Bringing Programming Power to Markdown*
+
+---
+
+## What is Quarkdown?
+
+.row alignment:{center} gap:{3cm}
+    ### 📝 Markdown
+    
+    Simple, readable
+    
+    ### ➕ Programming
+    
+    Functions, variables, logic
+    
+    ### 🎯 Multi-Format
+    
+    HTML, PDF, Slides
+
+.center
+**= Powerful Document Creation System**
+
+---
+
+## Key Features
+
+.grid columns:{2} gap:{2cm}
+    ### 🔧 Turing Complete
+    
+    Full programming capabilities within Markdown
+    
+    ### 🎨 Layout System
+    
+    Flexible rows, columns, and grids
+    
+    ### 📊 Math Support
+    
+    LaTeX-style mathematical expressions
+    
+    ### 🖼️ Enhanced Media
+    
+    Advanced image handling with dimensions
+
+---
+
+## Variables in Action
+
+.var {company} {Acme Corp}
+.var {growth_rate} {25}
+.var {users} {10000}
+
+### Company Stats
+
+- **Company:** .company
+- **Growth Rate:** .growth_rate%
+- **Active Users:** .users
+
+.if {.growth_rate > 20}
+    🚀 **Exceptional Growth!**
+
+---
+
+## Mathematical Expressions
+
+### The Beauty of Mathematics
+
+Einstein's mass-energy equivalence:
+
+$$
+E = mc^2
+$$
+
+The Pythagorean theorem:
+
+$$
+a^2 + b^2 = c^2
+$$
+
+.var {a} {3}
+.var {b} {4}
+.var {c} {.pow {.add {.pow {.a} to:{2}} to:{.pow {.b} to:{2}}} to:{0.5}}
+
+Example: If a = .a and b = .b, then c = .c
+
+---
+
+## Layout Demonstrations
+
+### Row Layout
+
+.row alignment:{center} gap:{2cm}
+    **Design**
+    
+    Beautiful and modern interface
+    
+    **Performance**
+    
+    Lightning-fast rendering
+    
+    **Flexibility**
+    
+    Adapt to any use case
+
+### Centered Content
+
+.center
+**Everything can be perfectly centered**
+
+---
+
+## Code Integration
+
+### Syntax Highlighting
+
+```javascript
+function createQuarkdownDocument(content) {
+    const compiler = new QuarkdownCompiler();
+    return compiler.compile(content, {
+        doctype: 'slides',
+        theme: 'darko'
+    });
+}
+```
+
+### Custom Functions
+
+```markdown
+.function {highlight}
+    text color:
+    .center
+        **✨ .text ✨**
+        
+        Color: .color
+
+.highlight {Important Message} color:{blue}
+```
+
+---
+
+## Real-World Applications
+
+.grid columns:{3} gap:{1em}
+    ### 📚 Academic Papers
+    
+    Research publications with complex math and references
+    
+    ### 📊 Business Reports
+    
+    Dynamic charts and calculations
+    
+    ### 🎓 Educational Content
+    
+    Interactive tutorials and exercises
+    
+    ### 📋 Documentation
+    
+    Technical docs with live examples
+    
+    ### 🎯 Presentations
+    
+    Like this one!
+    
+    ### 📖 Books
+    
+    Multi-chapter publications
+
+---
+
+## Performance Comparison
+
+| Feature | LaTeX | Standard Markdown | Quarkdown |
+|---------|-------|------------------|-----------|
+| Compile Speed | Slow | Fast | **Ultra Fast** |
+| Learning Curve | Steep | Easy | **Moderate** |
+| Programming | Limited | None | **Full** |
+| Layout Control | Excellent | Basic | **Excellent** |
+| Live Preview | No | Basic | **Advanced** |
+
+.center
+⚡ **Millisecond compilation times vs. seconds in LaTeX**
+
+---
+
+## Future Roadmap
+
+.var {current_version} {1.5.1}
+.var {next_version} {2.0.0}
+
+### Current Status: v.current_version
+
+.row alignment:{start} gap:{2cm}
+    **✅ Completed**
+    
+    - Core functionality
+    - Standard library
+    - Live preview
+    - Multi-format export
+    
+    **🚧 In Progress**
+    
+    - VS Code extension
+    - Package managers
+    - Plugin system
+    - Cloud integration
+
+### Next Release: v.next_version
+
+- Enhanced performance
+- Extended standard library
+- Better error handling
+- Community plugins
+
+---
+
+## Community Impact
+
+.var {github_stars} {1200}
+.var {contributors} {15}
+.var {downloads} {5000}
+
+### Growing Ecosystem
+
+.center
+🌟 **.github_stars** GitHub Stars
+
+👥 **.contributors** Contributors
+
+📥 **.downloads** Downloads
+
+### Success Stories
+
+> "Quarkdown revolutionized our documentation workflow" - Tech Startup CEO
+
+> "Finally, a tool that bridges the gap between simplicity and power" - Academic Researcher
+
+---
+
+## Getting Started
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/iamgio/quarkdown.git
+
+# Install VS Code extension
+code --install-extension quarkdown-vscode
+
+# Create your first document
+quarkdown create my-project
+```
+
+### Your First Document
+
+```markdown
+.docname {My First Document}
+.docauthor {Your Name}
+
+# Hello, Quarkdown!
+
+.var {magic} {✨}
+
+This is .magic amazing .magic
+```
+
+---
+
+## Live Demo
+
+.center
+### Let's see it in action!
+
+.var {demo_text} {Live coding demonstration}
+
+**Demo:** .demo_text
+
+.function {countdown}
+    seconds:
+    ⏱️ **T-minus .seconds seconds!**
+
+.countdown {3}
+.countdown {2}
+.countdown {1}
+
+🚀 **Demo time!**
+
+---
+
+## Why Choose Quarkdown?
+
+.row alignment:{center} gap:{2cm}
+    ### 🎯 For Developers
+    
+    - Familiar Markdown syntax
+    - Programming capabilities
+    - Version control friendly
+    - Extensible architecture
+    
+    ### 📚 For Academics
+    
+    - Complex math support
+    - Citation management
+    - Multi-format output
+    - Collaborative workflows
+    
+    ### 💼 For Business
+    
+    - Dynamic reports
+    - Template reuse
+    - Brand consistency
+    - Cost effective
+
+---
+
+## Join the Revolution
+
+.center
+### 🌍 **Be Part of the Future**
+
+.grid columns:{2} gap:{3cm}
+    ### 🤝 Contribute
+    
+    - Submit pull requests
+    - Report issues
+    - Share ideas
+    - Write documentation
+    
+    ### 📢 Spread the Word
+    
+    - Star on GitHub
+    - Share on social media
+    - Write blog posts
+    - Give talks
+
+### 🔗 Links
+
+**GitHub:** github.com/iamgio/quarkdown
+
+**Documentation:** quarkdown.io/docs
+
+**Community:** discord.gg/quarkdown
+
+---
+
+## Thank You!
+
+.center
+# Questions?
+
+**Contact:** hello@quarkdown.io
+
+**Twitter:** @quarkdown
+
+**GitHub:** github.com/iamgio/quarkdown
+
+.row alignment:{center} gap:{4cm}
+    🙋‍♀️ **Q&A Session**
+    
+    Ask anything!
+    
+    📧 **Follow Up**
+    
+    Stay in touch!
+
+---
+
+## Bonus: Advanced Features
+
+### Custom Themes
+
+```markdown
+.theme {corporate} layout:{modern}
+```
+
+### Data Integration
+
+```markdown
+.var {sales_data} {./data/quarterly.csv}
+.chart {line} data:{.sales_data}
+```
+
+### Multi-language Support
+
+```markdown
+.doclang {ja}
+.include {content/japanese-section.qmd}
+```
+
+.center
+**The possibilities are endless!** 🚀
